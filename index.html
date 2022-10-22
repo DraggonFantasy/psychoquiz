@@ -7,11 +7,41 @@
   <title>Ψ</title>
 
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa">
 </head>
 <body>
 
-  <button onclick="test()">Test</button>
+<!--  <button onclick="test()">Test</button>-->
 
+  <div id="q_yesno" class="centered" style="display: none;">
+    <div class="question">Вам часто кажуть, що ви більше думаєте про інших, ніж про себе?</div>
+    <button class="answer-option bg-green r1">Так</button>
+    <button class="answer-option bg-red r2">Ні</button>
+  </div>
+
+  <div id="q_agree" class="centered" style="display: none;">
+    <div class="question">У наш час роботу треба обирати радше за зарплатнею, ніж за уподобаннями</div>
+    <button class="answer-option bg-green r1">Згоден</button>
+    <button class="answer-option bg-red r2">Не згоден</button>
+  </div>
+
+  <div id="q_arange" class="centered">
+    <div id="q_arange_options">
+      <div class="arange-option"
+           style="display: none; width: 70%;"
+      >
+        активна діяльна життя (повнота та емоційна насиченість життя)
+      </div>
+    </div>
+    <button class="answer-option">Далі</button>
+  </div>
+
+  <script src="questions.js"></script>
   <script src="index.js"></script>
+  <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
+
+  <script src="jquery.ui.touch-punch.js"></script>
+
 </body>
 </html>
