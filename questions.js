@@ -1,1 +1,7 @@
-var questions = {}
+function q(qtype) {
+
+}
+
+const questions = [
+    q("", "", )
+]
