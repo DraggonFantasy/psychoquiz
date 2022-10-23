@@ -21,8 +21,9 @@ function setSex(s) {
 
 function answerYesNo(a) {
     if(activeQuestion != null && questions[activeQuestion].type === "yesno") {
+        const group = questions[activeQuestion].group;
         const key = document.getElementById("yesno_question").innerHTML;
-        userAnswers[key] = a;
+        userAnswers[group][key] = a;
         console.log(`Updated inputAnswers[${key}]`, userAnswers)
     }
     next()
@@ -30,17 +31,19 @@ function answerYesNo(a) {
 
 function answerAgree(a) {
     if(activeQuestion != null && questions[activeQuestion].type === "agree") {
+        const group = questions[activeQuestion].group;
         const key = document.getElementById("agree_question").innerHTML;
-        userAnswers[key] = a;
+        userAnswers[group][key] = a;
         console.log(`Updated inputAnswers[${key}]`, userAnswers)
     }
     next()
 }
 
 function answerChoice(a) {
-    if(activeQuestion != null && questions[activeQuestion].type === "agree") {
+    if(activeQuestion != null && (questions[activeQuestion].type === "choice" || questions[activeQuestion].type === "choiceWithCustom")) {
+        const group = questions[activeQuestion].group;
         const key = document.getElementById("choice_with_custom_question").innerHTML;
-        userAnswers[key] = a;
+        userAnswers[group][key] = a;
         console.log(`Updated inputAnswers[${key}]`, userAnswers)
     }
     next()
@@ -53,8 +56,9 @@ function answerArange() {
 
 function answerInput() {
     if(activeQuestion != null && questions[activeQuestion].type === "input") {
+        const group = questions[activeQuestion].group;
         const key = document.getElementById("input_question").innerHTML;
-        userAnswers[key] = document.getElementById("input_answer").value;
+        userAnswers[group][key] = document.getElementById("input_answer").value;
         console.log(`Updated inputAnswers[${key}]`, userAnswers)
     }
     next()
@@ -100,8 +104,9 @@ function next() {
 function back() {
     console.log("BACK")
     if(activeQuestion && questions[activeQuestion].type === "input") {
+        const group = questions[activeQuestion].group;
         const key = document.getElementById("input_question").innerHTML;
-        userAnswers[key] = document.getElementById("input_answer").value;
+        userAnswers[group][key] = document.getElementById("input_answer").value;
         console.log(`Updated inputAnswers[${key}]`, userAnswers)
 
     }
@@ -150,8 +155,11 @@ function update() {
         return
     }
     let qtype = questions[activeQuestion].type;
+    let group = questions[activeQuestion].group;
     let arg1 = questions[activeQuestion].arg1;
     let arg2 = questions[activeQuestion].arg2;
+    if(group && !userAnswers[group])
+        userAnswers[group] = {}
     if(arg1 && arg1[sex]) {
         arg1 = arg1[sex]
     }
@@ -177,8 +185,8 @@ function update() {
             break;
         case "input":
             document.getElementById("input_question").innerHTML = arg1;
-            document.getElementById("input_answer").value = userAnswers[arg1] || "";
-            console.log(`inputAnswers[${arg1}] = `, userAnswers[arg1], userAnswers[arg1] || "")
+            document.getElementById("input_answer").value = userAnswers[group][arg1] || "";
+            console.log(`inputAnswers[${arg1}] = `, userAnswers[group][arg1], userAnswers[group][arg1] || "")
             activate("q_input")
             break;
         case "methodic":
@@ -222,7 +230,7 @@ function update() {
             btn.classList.add("answer-option")
             btn.onclick = () => {
                 const res = prompt("Введіть ваш варіант")
-                answer(res)
+                answerChoice(res)
             }
             btn.innerText = "Свій варіант"
             wrapper.appendChild(btn)
