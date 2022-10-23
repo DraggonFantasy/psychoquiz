@@ -1,3 +1,9 @@
+var userId = window.localStorage.getItem("userId")
+if(userId == null) {
+    userId = makeid(8);
+}
+window.localStorage.setItem("userId", userId);
+
 var activeQuestion = parseInt(window.localStorage.getItem("activeQuestion")) || 0;
 var sex = undefined;
 sex = window.localStorage.getItem("sex")
@@ -31,6 +37,16 @@ function answerAgree(a) {
     next()
 }
 
+function answerChoice(a) {
+    if(activeQuestion != null && questions[activeQuestion].type === "agree") {
+        const key = document.getElementById("choice_with_custom_question").innerHTML;
+        userAnswers[key] = a;
+        console.log(`Updated inputAnswers[${key}]`, userAnswers)
+    }
+    next()
+
+}
+
 function answerArange() {
     next()
 }
@@ -44,18 +60,35 @@ function answerInput() {
     next()
 }
 
-const test = () => {
+const saveToCloud = () => {
     const url = "https://europe-central2-silicon-reason-366309.cloudfunctions.net/psychoquiz";
+
+    var arangeToStore = {}
+    if(window.localStorage.getItem("storeArangeOptions0") === "1") {
+        for (const [i, v] of Object.entries(arangeOptions[0])) {
+            arangeToStore[v] = parseInt(i) + 1
+        }
+    }
+    if(window.localStorage.getItem("storeArangeOptions1") === "1") {
+        for (const [i, v] of Object.entries(arangeOptions[1])) {
+            arangeToStore[v] = parseInt(i) + 1
+        }
+    }
+
+    var answersToStore = {
+        "Стать": sex,
+        "Пройдено питань": activeQuestion,
+        "Відповіді": userAnswers,
+        "Рокич": arangeToStore,
+    }
+
     fetch(url, {
         method : "POST",
         body: JSON.stringify({
-            "message": "Hello my friend"
+            "userId": userId,
+            ...answersToStore
         })
-    }).then(
-        response => response.json()
-    ).then(
-        json => console.log(json)
-    );
+    })
 }
 
 function next() {
@@ -83,16 +116,21 @@ function reset() {
     sex = undefined;
     userAnswers = {};
     arangeOptions = defaultArangeOptions;
+    userId = makeid(8);
 
     window.localStorage.setItem("sex", sex)
     window.localStorage.setItem("activeQuestion", activeQuestion)
     window.localStorage.setItem("userAnswers", JSON.stringify(userAnswers))
     window.localStorage.setItem("arangeOptions", JSON.stringify(arangeOptions))
+    window.localStorage.setItem("userId", userId);
+    window.localStorage.removeItem("storeArangeOptions0")
+    window.localStorage.removeItem("storeArangeOptions1")
 
     update()
 }
 
 function update() {
+    window.localStorage.setItem("userId", userId);
     window.localStorage.setItem("sex", sex)
     window.localStorage.setItem("activeQuestion", activeQuestion)
     window.localStorage.setItem("userAnswers", JSON.stringify(userAnswers))
@@ -153,7 +191,7 @@ function update() {
             activate("q_arange")
             break;
         case "choice":
-            documнаt.getElementById("choice_with_cнаtom_question").innerHTML = arg1;
+            document.getElementById("choice_with_custom_question").innerHTML = arg1;
             var el = document.getElementById("q_choice_with_custom")
             var wrapper = el.querySelector(".wrapper")
             var choices = arg2;
@@ -161,7 +199,7 @@ function update() {
             for(const choice of arg2) {
                 const btn = document.createElement("button")
                 btn.classList.add("answer-option")
-                btn.onclick = () => answer(choice)
+                btn.onclick = () => answerChoice(choice)
                 btn.innerText = choice
                 wrapper.appendChild(btn)
             }
@@ -176,7 +214,7 @@ function update() {
             for(const choice of arg2) {
                 const btn = document.createElement("button")
                 btn.classList.add("answer-option")
-                btn.onclick = () => answer(choice)
+                btn.onclick = () => answerChoice(choice)
                 btn.innerText = choice
                 wrapper.appendChild(btn)
             }
@@ -194,6 +232,8 @@ function update() {
             activate("q_outro")
             break;
     }
+
+    setTimeout(saveToCloud, 10)
 }
 
 function onDrag(e) {

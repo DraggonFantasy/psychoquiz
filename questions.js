@@ -1,14 +1,15 @@
-function q(qtype, arg1=null, arg2=null) {
+function q(qtype, arg1=null, arg2=null, arg3=null) {
     return {
         "type": qtype,
         "arg1": arg1,
-        "arg2": arg2
+        "arg2": arg2,
+        "arg3": arg3
     }
 }
 
 function makeid(length) {
     var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     var charactersLength = characters.length;
     for ( var i = 0; i < length; i++ ) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -17,6 +18,7 @@ function makeid(length) {
 }
 
 function createArangeOptions(index) {
+    window.localStorage.setItem("storeArangeOptions" + index, "1")
     const q_arange = document.getElementById("q_arange_options");
     while(q_arange.hasChildNodes()) q_arange.removeChild(q_arange.firstChild)
     const option = document.querySelector(".arange-option");

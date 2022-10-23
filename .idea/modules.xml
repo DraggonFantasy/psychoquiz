@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/psychoquiz.iml" filepath="$PROJECT_DIR$/.idea/psychoquiz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../psychoquiz_backend/.idea/psychoquiz_backend.iml" filepath="$PROJECT_DIR$/../psychoquiz_backend/.idea/psychoquiz_backend.iml" />
     </modules>
   </component>
 </project>
