@@ -42,6 +42,7 @@ function createArangeOptions(index) {
                 arangeOptions[index][oneI] = arangeOptions[index][twoI];
                 arangeOptions[index][twoI] = tmp;
                 console.log(arangeOptions)
+                window.localStorage.setItem("arangeOptions", JSON.stringify(arangeOptions))
 
             }})
     }
@@ -266,7 +267,7 @@ const questions = [
 ]
 
 
-const arangeOptions = [
+const defaultArangeOptions = [
     [
         "активна діяльна життя (повнота та емоційна насиченість життя);",
         "життєва мудрість (зрілість суджень і здоровий глузд, що досягаються життєвим досвідом);",
@@ -308,5 +309,10 @@ const arangeOptions = [
         "чуйність (дбайливість)"
     ]
 ]
+let arangeOptions = defaultArangeOptions;
+var storedOptions = window.localStorage.getItem("arangeOptions")
+if(storedOptions) {
+    arangeOptions = JSON.parse(storedOptions);
+}
 
 // setTimeout(createArangeOptions, 2)

@@ -1,6 +1,8 @@
-var activeQuestion = 0;
+var activeQuestion = parseInt(window.localStorage.getItem("activeQuestion")) || 0;
 var sex = undefined;
-var inputAnswers = {}
+sex = window.localStorage.getItem("sex")
+var userAnswers = {}
+userAnswers = JSON.parse(window.localStorage.getItem("userAnswers")) || {}
 
 function setSex(s) {
     sex = s;
@@ -11,7 +13,21 @@ function setSex(s) {
     next();
 }
 
-function answer(a) {
+function answerYesNo(a) {
+    if(activeQuestion != null && questions[activeQuestion].type === "yesno") {
+        const key = document.getElementById("yesno_question").innerHTML;
+        userAnswers[key] = a;
+        console.log(`Updated inputAnswers[${key}]`, userAnswers)
+    }
+    next()
+}
+
+function answerAgree(a) {
+    if(activeQuestion != null && questions[activeQuestion].type === "agree") {
+        const key = document.getElementById("agree_question").innerHTML;
+        userAnswers[key] = a;
+        console.log(`Updated inputAnswers[${key}]`, userAnswers)
+    }
     next()
 }
 
@@ -20,6 +36,11 @@ function answerArange() {
 }
 
 function answerInput() {
+    if(activeQuestion != null && questions[activeQuestion].type === "input") {
+        const key = document.getElementById("input_question").innerHTML;
+        userAnswers[key] = document.getElementById("input_answer").value;
+        console.log(`Updated inputAnswers[${key}]`, userAnswers)
+    }
     next()
 }
 
@@ -39,11 +60,6 @@ const test = () => {
 
 function next() {
     console.log("NEXT")
-    if(activeQuestion != null && questions[activeQuestion].type === "input") {
-        const key = document.getElementById("input_question").innerHTML;
-        inputAnswers[key] = document.getElementById("input_answer").value;
-        console.log(`Updated inputAnswers[${key}]`, inputAnswers)
-    }
     activeQuestion += 1;
     update()
 }
@@ -52,8 +68,8 @@ function back() {
     console.log("BACK")
     if(activeQuestion && questions[activeQuestion].type === "input") {
         const key = document.getElementById("input_question").innerHTML;
-        inputAnswers[key] = document.getElementById("input_answer").value;
-        console.log(`Updated inputAnswers[${key}]`, inputAnswers)
+        userAnswers[key] = document.getElementById("input_answer").value;
+        console.log(`Updated inputAnswers[${key}]`, userAnswers)
 
     }
     if(activeQuestion > 0) {
@@ -62,7 +78,26 @@ function back() {
     }
 }
 
+function reset() {
+    activeQuestion = 0;
+    sex = undefined;
+    userAnswers = {};
+    arangeOptions = defaultArangeOptions;
+
+    window.localStorage.setItem("sex", sex)
+    window.localStorage.setItem("activeQuestion", activeQuestion)
+    window.localStorage.setItem("userAnswers", JSON.stringify(userAnswers))
+    window.localStorage.setItem("arangeOptions", JSON.stringify(arangeOptions))
+
+    update()
+}
+
 function update() {
+    window.localStorage.setItem("sex", sex)
+    window.localStorage.setItem("activeQuestion", activeQuestion)
+    window.localStorage.setItem("userAnswers", JSON.stringify(userAnswers))
+    window.localStorage.setItem("arangeOptions", JSON.stringify(arangeOptions))
+
     function activate(id) {
         active = document.querySelector(".activated-question");
         if(active) active.classList.remove("activated-question");
@@ -104,8 +139,8 @@ function update() {
             break;
         case "input":
             document.getElementById("input_question").innerHTML = arg1;
-            document.getElementById("input_answer").value = inputAnswers[arg1] || "";
-            console.log(`inputAnswers[${arg1}] = `, inputAnswers[arg1], inputAnswers[arg1] || "")
+            document.getElementById("input_answer").value = userAnswers[arg1] || "";
+            console.log(`inputAnswers[${arg1}] = `, userAnswers[arg1], userAnswers[arg1] || "")
             activate("q_input")
             break;
         case "methodic":

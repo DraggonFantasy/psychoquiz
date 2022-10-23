@@ -12,6 +12,7 @@
 <body>
   <div class="centered question" style="position: fixed; left: 10px; top: 10px; font-size: 1.3rem;" id="question_number"></div>
   <button class="centered question btn" style="background: none; border: none; position: fixed; left: 10px; top: 30px; font-size: 2.5rem;" onclick="back()">🡨</button>
+  <button class="centered question btn" style="background: none; border: none; position: fixed; right: 10px; top: 10px; font-size: 1rem;" onclick="reset()">С початку</button>
 
 <!--  <button onclick="test()">Test</button>-->
 
@@ -47,14 +48,14 @@
 
   <div id="q_yesno" class="centered qblock">
     <div class="question" id="yesno_question">Вам часто кажуть, що ви більше думаєте про інших, ніж про себе?</div>
-    <button class="answer-option bg-green r1" onclick="answer('yes');">Так</button>
-    <button class="answer-option bg-red r2" onclick="answer('no');">Ні</button>
+    <button class="answer-option bg-green r1" onclick="answerYesNo('yes');">Так</button>
+    <button class="answer-option bg-red r2" onclick="answerYesNo('no');">Ні</button>
   </div>
 
   <div id="q_agree" class="centered qblock">
     <div class="question" id="agree_question">У наш час роботу треба обирати радше за зарплатнею, ніж за уподобаннями</div>
-    <button class="answer-option bg-green r1" id="agree_yes" onclick="answer('agree')">Згоден</button>
-    <button class="answer-option bg-red r2" id="agree_no" onclick="answer('disagree')">Не згоден</button>
+    <button class="answer-option bg-green r1" id="agree_yes" onclick="answerAgree('agree')">Згоден</button>
+    <button class="answer-option bg-red r2" id="agree_no" onclick="answerAgree('disagree')">Не згоден</button>
   </div>
 
   <div id="q_input" class="centered qblock">
