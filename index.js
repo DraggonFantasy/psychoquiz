@@ -1,8 +1,13 @@
 var activeQuestion = 0;
 var sex = undefined;
+var inputAnswers = {}
 
 function setSex(s) {
     sex = s;
+
+    document.getElementById("agree_yes").innerText = sex === "male" ? "Згоден" : "Згодна"
+    document.getElementById("agree_no").innerText = sex === "male" ? "Не згоден" : "Не згодна"
+
     next();
 }
 
@@ -15,7 +20,6 @@ function answerArange() {
 }
 
 function answerInput() {
-    document.getElementById("input_answer").value = null;
     next()
 }
 
@@ -34,8 +38,28 @@ const test = () => {
 }
 
 function next() {
+    console.log("NEXT")
+    if(activeQuestion != null && questions[activeQuestion].type === "input") {
+        const key = document.getElementById("input_question").innerHTML;
+        inputAnswers[key] = document.getElementById("input_answer").value;
+        console.log(`Updated inputAnswers[${key}]`, inputAnswers)
+    }
     activeQuestion += 1;
     update()
+}
+
+function back() {
+    console.log("BACK")
+    if(activeQuestion && questions[activeQuestion].type === "input") {
+        const key = document.getElementById("input_question").innerHTML;
+        inputAnswers[key] = document.getElementById("input_answer").value;
+        console.log(`Updated inputAnswers[${key}]`, inputAnswers)
+
+    }
+    if(activeQuestion > 0) {
+        activeQuestion -= 1;
+        update()
+    }
 }
 
 function update() {
@@ -55,8 +79,14 @@ function update() {
     let qtype = questions[activeQuestion].type;
     let arg1 = questions[activeQuestion].arg1;
     let arg2 = questions[activeQuestion].arg2;
+    if(arg1 && arg1[sex]) {
+        arg1 = arg1[sex]
+    }
+    if(arg2 && arg2[sex]) {
+        arg2 = arg2[sex]
+    }
     console.log("qtype", qtype)
-    document.getElementById("question_number").innerText = `${activeQuestion+1}/${questions.length}`
+    document.getElementById("question_number").innerHTML = `${activeQuestion+1}/${questions.length}`
     switch (qtype) {
         case "intro":
             activate("q_intro")
@@ -65,20 +95,22 @@ function update() {
             activate("q_sex")
             break;
         case "yesno":
-            document.getElementById("yesno_question").innerText = arg1;
+            document.getElementById("yesno_question").innerHTML = arg1;
             activate("q_yesno")
             break;
         case "agree":
-            document.getElementById("agree_question").innerText = arg1;
+            document.getElementById("agree_question").innerHTML = arg1;
             activate("q_agree")
             break;
         case "input":
-            document.getElementById("input_question").innerText = arg1;
+            document.getElementById("input_question").innerHTML = arg1;
+            document.getElementById("input_answer").value = inputAnswers[arg1] || "";
+            console.log(`inputAnswers[${arg1}] = `, inputAnswers[arg1], inputAnswers[arg1] || "")
             activate("q_input")
             break;
         case "methodic":
-            document.getElementById("methodic_name").innerText = arg1;
-            document.getElementById("methodic_instruction").innerText = arg2;
+            document.getElementById("methodic_name").innerHTML = arg1;
+            document.getElementById("methodic_instruction").innerHTML = arg2;
             activate("q_methodic")
             break;
         case "arange":
@@ -86,7 +118,7 @@ function update() {
             activate("q_arange")
             break;
         case "choice":
-            document.getElementById("choice_with_custom_question").innerText = arg1;
+            documнаt.getElementById("choice_with_cнаtom_question").innerHTML = arg1;
             var el = document.getElementById("q_choice_with_custom")
             var wrapper = el.querySelector(".wrapper")
             var choices = arg2;
@@ -101,7 +133,7 @@ function update() {
             activate("q_choice_with_custom")
             break;
         case "choiceWithCustom":
-            document.getElementById("choice_with_custom_question").innerText = arg1;
+            document.getElementById("choice_with_custom_question").innerHTML = arg1;
             var el = document.getElementById("q_choice_with_custom")
             var wrapper = el.querySelector(".wrapper")
             var choices = arg2;

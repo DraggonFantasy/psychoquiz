@@ -11,16 +11,24 @@
 </head>
 <body>
   <div class="centered question" style="position: fixed; left: 10px; top: 10px; font-size: 1.3rem;" id="question_number"></div>
+  <button class="centered question btn" style="background: none; border: none; position: fixed; left: 10px; top: 30px; font-size: 2.5rem;" onclick="back()">🡨</button>
 
 <!--  <button onclick="test()">Test</button>-->
 
   <div id="q_intro" class="centered qblock">
-    <div class="question">Вітаю вас!!!</div>
+    <div class="question">
+      <p>
+      Зараз волонтерська діяльність є дуже важливою та невід’ємною частинкою життя кожного. У зв’язку з значним впливом війни особистість, ми хочемо дізнатись про Ваше ставлення до волонтерства, що Вас мотивує, та як воно впливає на Ваше життя. Опитування буде вестись на основі анонімності та добровільності.
+      </p>
+      <p>
+      Тут немає “правильних” і “неправильних” відповідей. Ваша думка цінна для нас саме такою, якою вона є. Ваші відповіді конфіденційні і будуть використані тільки у вигляді статистичних даних.
+      </p>
+    </div>
     <button class="answer-option" onclick="next()">Далі</button>
   </div>
 
   <div id="q_outro" class="centered qblock">
-    <div class="question">Дякую <div style="font-size: 10rem;">♡</div>️</div>
+    <div class="question">Дякую за участь та допомогу в дослідженні!<div style="font-size: 10rem;">♡</div>️</div>
   </div>
 
   <div id="q_methodic" class="centered qblock">
@@ -45,8 +53,8 @@
 
   <div id="q_agree" class="centered qblock">
     <div class="question" id="agree_question">У наш час роботу треба обирати радше за зарплатнею, ніж за уподобаннями</div>
-    <button class="answer-option bg-green r1" onclick="answer('agree')">Згоден</button>
-    <button class="answer-option bg-red r2" onclick="answer('disagree')">Не згоден</button>
+    <button class="answer-option bg-green r1" id="agree_yes" onclick="answer('agree')">Згоден</button>
+    <button class="answer-option bg-red r2" id="agree_no" onclick="answer('disagree')">Не згоден</button>
   </div>
 
   <div id="q_input" class="centered qblock">
