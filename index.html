@@ -10,30 +10,68 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa">
 </head>
 <body>
+  <div class="centered question" style="position: fixed; left: 10px; top: 10px; font-size: 1.3rem;" id="question_number"></div>
 
 <!--  <button onclick="test()">Test</button>-->
 
-  <div id="q_yesno" class="centered" style="display: none;">
-    <div class="question">Вам часто кажуть, що ви більше думаєте про інших, ніж про себе?</div>
-    <button class="answer-option bg-green r1">Так</button>
-    <button class="answer-option bg-red r2">Ні</button>
+  <div id="q_intro" class="centered qblock">
+    <div class="question">Вітаю вас!!!</div>
+    <button class="answer-option" onclick="next()">Далі</button>
   </div>
 
-  <div id="q_agree" class="centered" style="display: none;">
-    <div class="question">У наш час роботу треба обирати радше за зарплатнею, ніж за уподобаннями</div>
-    <button class="answer-option bg-green r1">Згоден</button>
-    <button class="answer-option bg-red r2">Не згоден</button>
+  <div id="q_outro" class="centered qblock">
+    <div class="question">Дякую <div style="font-size: 10rem;">♡</div>️</div>
   </div>
 
-  <div id="q_arange" class="centered">
-    <div id="q_arange_options">
-      <div class="arange-option"
-           style="display: none; width: 70%;"
-      >
-        активна діяльна життя (повнота та емоційна насиченість життя)
-      </div>
+  <div id="q_methodic" class="centered qblock">
+    <div id="methodic_name" class="question" style="font-size: 1.5rem;">...</div>
+    <div class="question">Інструкція:</div>
+
+    <div id="methodic_instruction" class="question" style="font-size: 1.25rem;">...</div>
+    <button class="answer-option" onclick="next()">Далі</button>
+  </div>
+
+  <div id="q_sex" class="centered qblock">
+    <div class="question">Ваша стать</div>
+    <button class="answer-option bg-blue r1" onclick="setSex('male')">Ч</button>
+    <button class="answer-option bg-pink r2" onclick="setSex('female')">Ж</button>
+  </div>
+
+  <div id="q_yesno" class="centered qblock">
+    <div class="question" id="yesno_question">Вам часто кажуть, що ви більше думаєте про інших, ніж про себе?</div>
+    <button class="answer-option bg-green r1" onclick="answer('yes');">Так</button>
+    <button class="answer-option bg-red r2" onclick="answer('no');">Ні</button>
+  </div>
+
+  <div id="q_agree" class="centered qblock">
+    <div class="question" id="agree_question">У наш час роботу треба обирати радше за зарплатнею, ніж за уподобаннями</div>
+    <button class="answer-option bg-green r1" onclick="answer('agree')">Згоден</button>
+    <button class="answer-option bg-red r2" onclick="answer('disagree')">Не згоден</button>
+  </div>
+
+  <div id="q_input" class="centered qblock">
+    <div class="question" id="input_question">У наш час роботу треба обирати радше за зарплатнею, ніж за уподобаннями</div>
+    <input class="input" type="text" id="input_answer" />
+    <button class="answer-option" onclick="answerInput()">Далі</button>
+  </div>
+
+  <div id="q_choice_with_custom" class="centered qblock">
+    <div class="question" id="choice_with_custom_question">У наш час роботу треба обирати радше за зарплатнею, ніж за уподобаннями</div>
+    <div class="wrapper">
+
     </div>
-    <button class="answer-option">Далі</button>
+<!--    <button class="answer-option" onclick="answerInput()">Далі</button>-->
+  </div>
+
+  <div id="q_arange" class="centered qblock">
+    <div class="arange-option"
+         style="display: none; width: 70%;"
+    >
+      активна діяльна життя (повнота та емоційна насиченість життя)
+    </div>
+    <div id="q_arange_options">
+    </div>
+    <button class="answer-option" onclick="answerArange()">Далі</button>
   </div>
 
   <script src="questions.js"></script>

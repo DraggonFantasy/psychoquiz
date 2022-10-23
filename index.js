@@ -1,3 +1,23 @@
+var activeQuestion = 0;
+var sex = undefined;
+
+function setSex(s) {
+    sex = s;
+    next();
+}
+
+function answer(a) {
+    next()
+}
+
+function answerArange() {
+    next()
+}
+
+function answerInput() {
+    document.getElementById("input_answer").value = null;
+    next()
+}
 
 const test = () => {
     const url = "https://europe-central2-silicon-reason-366309.cloudfunctions.net/psychoquiz";
@@ -13,18 +33,98 @@ const test = () => {
     );
 }
 
-var activeQuestion = null;
-setTimeout(() => {
-    activeQuestion = questions[0];
+function next() {
+    activeQuestion += 1;
     update()
-}, 1)
+}
 
 function update() {
-    let qtype = activeQuestion.type;
+    function activate(id) {
+        active = document.querySelector(".activated-question");
+        if(active) active.classList.remove("activated-question");
+        document.getElementById(id).classList.add("activated-question");
+    }
+
+    if(activeQuestion == null) {
+        activeQuestion = 0;
+    }
+    if(activeQuestion >= questions.length) {
+        // TODO
+        return
+    }
+    let qtype = questions[activeQuestion].type;
+    let arg1 = questions[activeQuestion].arg1;
+    let arg2 = questions[activeQuestion].arg2;
+    console.log("qtype", qtype)
+    document.getElementById("question_number").innerText = `${activeQuestion+1}/${questions.length}`
     switch (qtype) {
-        case "yesno":
+        case "intro":
+            activate("q_intro")
             break;
-        case "custom":
+        case "sex":
+            activate("q_sex")
+            break;
+        case "yesno":
+            document.getElementById("yesno_question").innerText = arg1;
+            activate("q_yesno")
+            break;
+        case "agree":
+            document.getElementById("agree_question").innerText = arg1;
+            activate("q_agree")
+            break;
+        case "input":
+            document.getElementById("input_question").innerText = arg1;
+            activate("q_input")
+            break;
+        case "methodic":
+            document.getElementById("methodic_name").innerText = arg1;
+            document.getElementById("methodic_instruction").innerText = arg2;
+            activate("q_methodic")
+            break;
+        case "arange":
+            createArangeOptions(arg1-1)
+            activate("q_arange")
+            break;
+        case "choice":
+            document.getElementById("choice_with_custom_question").innerText = arg1;
+            var el = document.getElementById("q_choice_with_custom")
+            var wrapper = el.querySelector(".wrapper")
+            var choices = arg2;
+            while(wrapper.hasChildNodes()) wrapper.removeChild(wrapper.firstChild);
+            for(const choice of arg2) {
+                const btn = document.createElement("button")
+                btn.classList.add("answer-option")
+                btn.onclick = () => answer(choice)
+                btn.innerText = choice
+                wrapper.appendChild(btn)
+            }
+            activate("q_choice_with_custom")
+            break;
+        case "choiceWithCustom":
+            document.getElementById("choice_with_custom_question").innerText = arg1;
+            var el = document.getElementById("q_choice_with_custom")
+            var wrapper = el.querySelector(".wrapper")
+            var choices = arg2;
+            while(wrapper.hasChildNodes()) wrapper.removeChild(wrapper.firstChild);
+            for(const choice of arg2) {
+                const btn = document.createElement("button")
+                btn.classList.add("answer-option")
+                btn.onclick = () => answer(choice)
+                btn.innerText = choice
+                wrapper.appendChild(btn)
+            }
+            let btn = document.createElement("button")
+            btn.classList.add("answer-option")
+            btn.onclick = () => {
+                const res = prompt("Введіть ваш варіант")
+                answer(res)
+            }
+            btn.innerText = "Свій варіант"
+            wrapper.appendChild(btn)
+            activate("q_choice_with_custom")
+            break;
+        case "outro":
+            activate("q_outro")
             break;
     }
 }
@@ -52,3 +152,5 @@ function allowDrop(e) {
 function allowDropEnd(e) {
     e.target.classList.remove("todrop")
 }
+
+setTimeout(update, 100)
