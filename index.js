@@ -10,6 +10,9 @@ sex = window.localStorage.getItem("sex")
 var userAnswers = {}
 userAnswers = JSON.parse(window.localStorage.getItem("userAnswers")) || {}
 
+var globalAnswerTable = {}
+globalAnswerTable = JSON.parse(window.localStorage.getItem("globalAnswersTable")) || {};
+
 function setSex(s) {
     sex = s;
 
@@ -65,7 +68,7 @@ function answerInput() {
 }
 
 const saveToCloud = () => {
-    const url = "https://europe-central2-silicon-reason-366309.cloudfunctions.net/psychoquiz";
+    // const url = "https://europe-central2-silicon-reason-366309.cloudfunctions.net/psychoquiz";
 
     var arangeToStore = {}
     if(window.localStorage.getItem("storeArangeOptions0") === "1") {
@@ -79,20 +82,27 @@ const saveToCloud = () => {
         }
     }
 
-    var answersToStore = {
+    // var answersToStore = {
+    //     "Стать": sex,
+    //     "Пройдено питань": activeQuestion,
+    //     "Відповіді": userAnswers,
+    //     "Рокич": arangeToStore,
+    // }
+
+    // fetch(url, {
+    //     method : "POST",
+    //     body: JSON.stringify({
+    //         "userId": userId,
+    //         ...answersToStore
+    //     })
+    // })
+
+    globalAnswerTable[userId] = {
         "Стать": sex,
         "Пройдено питань": activeQuestion,
         "Відповіді": userAnswers,
-        "Рокич": arangeToStore,
+        "Рокич": arangeToStore
     }
-
-    fetch(url, {
-        method : "POST",
-        body: JSON.stringify({
-            "userId": userId,
-            ...answersToStore
-        })
-    })
 }
 
 function next() {
@@ -134,12 +144,25 @@ function reset() {
     update()
 }
 
+function downloadAnswers() {
+    var data = JSON.stringify(globalAnswerTable, null, 4);
+    var a = document.createElement('a');
+    var blob = new Blob([data], {'type':'application/json'});
+    a.href = window.URL.createObjectURL(blob);
+    a.download = "data.json";
+    a.click();
+}
+
 function update() {
     window.localStorage.setItem("userId", userId);
     window.localStorage.setItem("sex", sex)
     window.localStorage.setItem("activeQuestion", activeQuestion)
     window.localStorage.setItem("userAnswers", JSON.stringify(userAnswers))
     window.localStorage.setItem("arangeOptions", JSON.stringify(arangeOptions))
+    window.localStorage.setItem("globalAnswersTable", JSON.stringify(globalAnswerTable))
+
+    let dbtn = document.getElementById("downloadbtn")
+    if(dbtn) dbtn.innerText = `Скачати відповіді (${Object.keys(globalAnswerTable).length})`
 
     function activate(id) {
         active = document.querySelector(".activated-question");
